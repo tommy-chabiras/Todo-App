@@ -169,11 +169,14 @@ button {
 	]
 </script>
 
-
-<h1>Todo:</h1>
-
 <ul>
 	{#each todos as todo}
 		<TodoItem {todo}></TodoItem>
 	{/each}
 </ul>
+
+
+<style>
+
+
+</style>

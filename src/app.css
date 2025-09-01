@@ -1,0 +1,34 @@
+:root {
+
+	--primary-colour: #1f3d4b;
+	--secondary-colour: #facc15;
+
+	--font-colour: #ffffff;
+	--font-family: "Roboto";
+
+	--font-size: 16px;
+
+
+	--bg-colour: #020113;
+
+	--spacing: 1rem;
+	--border-r: 10px;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: var(--bg-colour);
+	padding: 25px;
+	color: var(--font-colour);
+	font-family: var(--font-family);
+	user-select: none;
+}
+
+
+ul {
+	list-style: none;
+}
