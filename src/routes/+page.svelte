@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
 
   let name = $state("");
@@ -153,4 +153,27 @@ button {
   }
 }
 
-</style>
+</style> -->
+
+<script lang="ts">
+	import TodoItem from "$lib/components/TodoItem.svelte";
+
+	const todos: Todo[] = [
+		{
+			id: "1",
+			title: "first todo",
+			description: "example descr",
+			completed: false,
+			createdAt: new Date(),
+		}
+	]
+</script>
+
+
+<h1>Todo:</h1>
+
+<ul>
+	{#each todos as todo}
+		<TodoItem {todo}></TodoItem>
+	{/each}
+</ul>
