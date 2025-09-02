@@ -26,7 +26,7 @@
 		border: 1px solid black;
 		cursor: pointer;
 		border-radius: var(--border-r);
-		background-color: var(--primary-colour);
+		background-color: var(--card-bg-colour);
 		padding: 25px 20px;
 		align-items: center;
 	}

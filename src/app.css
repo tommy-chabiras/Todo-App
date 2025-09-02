@@ -1,15 +1,18 @@
 :root {
 
-	--primary-colour: #1f3d4b;
+	--primary-colour: #51b1dd;
 	--secondary-colour: #facc15;
 
 	--font-colour: #ffffff;
+	--font-secondary-colour: #ffffff;
 	--font-family: "Roboto";
 
-	--font-size: 16px;
-
+	--font-sm: 14px;
+	--font-md: 16px;
+	--font-lg: 20px;
 
 	--bg-colour: #020113;
+	--card-bg-colour: #1f3d4b;
 
 	--spacing: 1rem;
 	--border-r: 10px;
@@ -18,14 +21,17 @@
 * {
 	margin: 0;
 	padding: 0;
+	border: none;
 }
 
 body {
 	background-color: var(--bg-colour);
-	padding: 25px;
+	padding: 5px 25px;
 	color: var(--font-colour);
 	font-family: var(--font-family);
 	user-select: none;
+
+
 }
 
 
