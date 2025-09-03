@@ -1,54 +1,63 @@
 <script lang="ts">
-	export let data;
-	let filter: "current" | "completed" = "current";
-	let mode: "day" | "week" | "month" = "week";
-	let view: "list" | "calendar" = "list";
-
-	const { todos } = data;
+	import { nav } from "$lib/stores/nav";
 </script>
 
 <header>
 	<nav class="main-nav">
 		<button
-			onclick={() => (view = "list")}
-			class={view === "list" ? "active" : ""}>List</button
+			onclick={() => ($nav.view = "list")}
+			class={$nav.view === "list" ? "active" : ""}>List</button
 		>
 		<button
-			onclick={() => (view = "calendar")}
-			class={view === "calendar" ? "active" : ""}>Calendar</button
+			onclick={() => ($nav.view = "calendar")}
+			class={$nav.view === "calendar" ? "active" : ""}>Calendar</button
 		>
 	</nav>
 </header>
 <nav class="sub-nav">
-	{#if view === "list"}
+	{#if $nav.view === "list"}
 		<button
-			onclick={() => (filter = "completed")}
-			class={filter === "completed" ? "active" : ""}>Completed</button
+			onclick={() =>
+				nav.update((n) => ({ ...n, list: { ...n.list, filter: "completed" } }))}
+			class={$nav.list.filter === "completed" ? "active" : ""}>Completed</button
 		>
 		<button
-			onclick={() => (filter = "current")}
-			class={filter === "current" ? "active" : ""}>Current</button
+			onclick={() =>
+				nav.update((n) => ({ ...n, list: { ...n.list, filter: "current" } }))}
+			class={$nav.list.filter === "current" ? "active" : ""}>Current</button
 		>
 		<div class="sort-con">
 			<label for="sort">Sort By:</label>
-			<select id="sort">
+			<select id="sort" bind:value={$nav.list.sort}>
 				<option value="date">Date</option>
 				<option value="a-z">A-Z</option>
 				<option value="custom">Custom</option>
 			</select>
 		</div>
-	{:else if view === "calendar"}
+	{:else if $nav.view === "calendar"}
 		<button
-			onclick={() => (mode = "day")}
-			class={mode === "day" ? "active" : ""}>Day</button
+			onclick={() =>
+				nav.update((n) => ({
+					...n,
+					calendar: { ...n.calendar, filter: "day" },
+				}))}
+			class={$nav.calendar.filter === "day" ? "active" : ""}>Day</button
 		>
 		<button
-			onclick={() => (mode = "week")}
-			class={mode === "week" ? "active" : ""}>Week</button
+			onclick={() =>
+				nav.update((n) => ({
+					...n,
+					calendar: { ...n.calendar, filter: "week" },
+				}))}
+			class={$nav.calendar.filter === "week" ? "active" : ""}>Week</button
 		>
 		<button
-			onclick={() => (mode = "month")}
-			class={mode === "month" ? "active" : ""}>Month</button
+			onclick={() =>
+				nav.update((n) => ({
+					...n,
+					calendar: { ...n.calendar, filter: "month" },
+				}))}
+			class={$nav.calendar.filter === "month" ? "active" : ""}>Month</button
 		>
 	{/if}
 </nav>
@@ -103,7 +112,13 @@
 	}
 
 	select {
-		padding: 10px;
+		padding: 10px 30px 10px 10px;
+		appearance: none;
+
+		background-image: url("data:image/svg+xml;utf8,<svg fill='currentColor' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+		background-repeat: no-repeat;
+		background-position: right 0.5em center;
+		background-size: var(--font-md);
 	}
 
 	option:checked {
