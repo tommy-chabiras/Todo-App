@@ -157,6 +157,7 @@ button {
 
 <script lang="ts">
 	import TodoItem from "$lib/components/TodoItem.svelte";
+	import { nav } from "$lib/stores/nav";
 
 	const todos: Todo[] = [
 		{
@@ -168,13 +169,17 @@ button {
 		}
 	]
 </script>
+{#if $nav.view === "calendar"}
+	{#each todos as todo}
 
+	{/each}
+{:else}
 <ul>
 	{#each todos as todo}
-		<TodoItem {todo}></TodoItem>
+		<TodoItem bind:todo={todo}></TodoItem>
 	{/each}
 </ul>
-
+{/if}
 
 <style>
 

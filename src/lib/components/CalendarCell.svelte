@@ -1,11 +1,10 @@
-
 <script lang="ts">
-	let { todo = $bindable()}: { todo: Todo } = $props();
+	let { todo }: { todo: Todo } = $props();
 </script>
 
 <li>
 	<div class="t-front">
-		<button onclick={() => todo.completed = !todo.completed}>
+		<button onclick={() => (todo.completed = !todo.completed)}>
 			{#if todo.completed}
 				✅
 			{:else}
@@ -31,15 +30,13 @@
 		align-items: center;
 	}
 
-	.t-front,
-	.t-back {
+	.t-front, .t-back {
 		display: flex;
 		gap: 25px;
 		align-items: center;
 	}
 
-	.t-front > *,
-	.t-back > * {
+	.t-front > *, .t-back > * {
 		display: inline-block;
 	}
 
