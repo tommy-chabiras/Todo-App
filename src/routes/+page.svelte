@@ -156,6 +156,7 @@ button {
 </style> -->
 
 <script lang="ts">
+	import CalendarCell from "$lib/components/CalendarCell.svelte";
 	import TodoItem from "$lib/components/TodoItem.svelte";
 	import { nav } from "$lib/stores/nav";
 
@@ -168,20 +169,66 @@ button {
 			createdAt: new Date(),
 		}
 	]
+
+	let visibleTodos: Todo[] = [];
+
+	$effect(() => {
+		switch ($nav.view) {
+		case "list":
+			switch ($nav.list.filter) {
+			case "current":
+				visibleTodos = todos.filter(todo =>
+					$nav.list.filter === "completed" ? todo.completed : !todo.completed
+				);
+				break;
+			case "completed":
+				visibleTodos = todos.filter(todo =>
+					$nav.list.filter === "completed" ? todo.completed : !todo.completed
+				);
+				break;
+			}
+			switch ($nav.list.sort) {
+			case "date":
+
+
+				break;
+			case "a-z":
+			
+			break;
+			case "custom":
+
+			break
+			
+			}
+			break;
+		case "calendar":
+			switch ($nav.calendar.filter) {
+				case "day":
+
+				break;
+				case "week":
+
+				break;
+
+				case "month":
+
+				break;
+			}
+		}
+	});
 </script>
+
 {#if $nav.view === "calendar"}
 	{#each todos as todo}
-
+		<CalendarCell {todo}></CalendarCell>
 	{/each}
 {:else}
-<ul>
-	{#each todos as todo}
-		<TodoItem bind:todo={todo}></TodoItem>
-	{/each}
-</ul>
+	<ul>
+		{#each todosFiltered as todo}
+			<TodoItem bind:todo></TodoItem>
+		{/each}
+	</ul>
 {/if}
 
 <style>
-
-
 </style>
