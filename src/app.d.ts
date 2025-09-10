@@ -4,6 +4,8 @@ declare global {
 		title: string;
 		description: string;
 		completed: boolean;
+		startDate: Date;
+		endDate: Date;
 		createdAt: Date;
 	}
 	type ListFilter = "current" | "completed";

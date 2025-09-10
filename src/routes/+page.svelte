@@ -166,55 +166,65 @@ button {
 			title: "first todo",
 			description: "example descr",
 			completed: false,
+			startDate: new Date(),
+			endDate: new Date(),
 			createdAt: new Date(),
-		}
-	]
+		},
+		{
+			id: "2",
+			title: "second todo",
+			description: "example descr",
+			completed: false,
+			startDate: new Date(),
+			endDate: new Date(),
+			createdAt: new Date(),
+		},
+	];
 
-	let visibleTodos: Todo[] = [];
+	let todosFiltered: Todo[] = $state([]);
 
 	$effect(() => {
+		let filtered = todos;
 		switch ($nav.view) {
-		case "list":
-			switch ($nav.list.filter) {
-			case "current":
-				visibleTodos = todos.filter(todo =>
-					$nav.list.filter === "completed" ? todo.completed : !todo.completed
-				);
+			case "list":
+				switch ($nav.list.sort) {
+					case "date":
+						filtered = filtered.sort(
+							(a, b) => b.startDate.getTime() - a.startDate.getTime()
+						);
+						break;
+					case "a-z":
+						filtered = filtered.sort((a, b) => a.title.localeCompare(b.title));
+						break;
+					case "custom":
+						break;
+				}
 				break;
-			case "completed":
-				visibleTodos = todos.filter(todo =>
-					$nav.list.filter === "completed" ? todo.completed : !todo.completed
-				);
-				break;
-			}
-			switch ($nav.list.sort) {
-			case "date":
+			case "calendar":
+				const today = new Date();
+				let tempDate = new Date();
+				tempDate.setHours(0, 0, 0, 0);
 
-
-				break;
-			case "a-z":
-			
-			break;
-			case "custom":
-
-			break
-			
-			}
-			break;
-		case "calendar":
-			switch ($nav.calendar.filter) {
-				case "day":
-
-				break;
-				case "week":
-
-				break;
-
-				case "month":
-
-				break;
-			}
+				switch ($nav.calendar.filter) {
+					case "day":
+						filtered = filtered.filter(
+							(todo) =>
+								todo.startDate.getFullYear() === today.getFullYear() &&
+								todo.startDate.getMonth() === today.getMonth() &&
+								todo.startDate.getDate() === today.getDate()
+						);
+						break;
+					case "week":
+						tempDate.setDate(tempDate.getDate() - tempDate.getDay());
+						filtered = filtered.filter((todo) => todo.startDate >= tempDate);
+						break;
+					case "month":
+						tempDate.setDate(1);
+						filtered = filtered.filter((todo) => todo.startDate >= tempDate);
+						break;
+				}
 		}
+		todosFiltered = filtered;
 	});
 </script>
 
@@ -225,7 +235,16 @@ button {
 {:else}
 	<ul>
 		{#each todosFiltered as todo}
-			<TodoItem bind:todo></TodoItem>
+			{#if ($nav.list.filter === "current" && !todo.completed) || ($nav.list.filter === "completed" && todo.completed) || $nav.list.filter === "all"}
+				<TodoItem
+					{todo}
+					toggle={() => {
+						const original = todos.find((t) => t.id === todo.id);
+						todo.completed = !todo.completed;
+						if (original) original.completed = !original.completed;
+					}}
+				/>
+			{/if}
 		{/each}
 	</ul>
 {/if}

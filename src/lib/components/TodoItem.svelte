@@ -1,11 +1,10 @@
-
 <script lang="ts">
-	let { todo = $bindable()}: { todo: Todo } = $props();
+	let { todo = $bindable<Todo>(), toggle }: { todo: Todo; toggle: () => void } = $props();
 </script>
 
 <li>
 	<div class="t-front">
-		<button onclick={() => todo.completed = !todo.completed}>
+		<button onclick={toggle}>
 			{#if todo.completed}
 				✅
 			{:else}
@@ -15,7 +14,7 @@
 		<p class="title">{todo.title}</p>
 	</div>
 	<p>{todo.description}</p>
-	<p>{todo.createdAt.toDateString()}</p>
+	<p>{todo.startDate.toDateString()}</p>
 	<button>expand button</button>
 </li>
 
