@@ -164,7 +164,7 @@ button {
 		{
 			id: "1",
 			title: "first todo",
-			description: "example descr",
+			description: "example descrgfewiug feuifew ghifuewbviuieowb iuuiveboifeq uivewiovwebv oweivweuiobefwi bvweioubgeiu geb",
 			completed: false,
 			startDate: new Date(),
 			endDate: new Date(),
@@ -226,6 +226,8 @@ button {
 		}
 		todosFiltered = filtered;
 	});
+
+
 </script>
 
 {#if $nav.view === "calendar"}

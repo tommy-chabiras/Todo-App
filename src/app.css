@@ -43,3 +43,10 @@ button {
 ul {
 	list-style: none;
 }
+
+
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4b839e transparent;
+}

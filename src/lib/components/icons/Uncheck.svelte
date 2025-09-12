@@ -1,0 +1,10 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	height="40px"
+	viewBox="0 -960 960 960"
+	width="40px"
+	fill="#e3e3e3"
+	><path
+		d="M120-120v-720h720v720H120Zm66.67-66.67h586.66v-586.66H186.67v586.66Z"
+	/></svg
+>

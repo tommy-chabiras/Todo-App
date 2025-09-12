@@ -1,6 +1,8 @@
 <script lang="ts">
-	import EditIcon from "$lib/components/icons/Edit.svelte";
-	import TrashIcon from "$lib/components/icons/Trash.svelte";
+	import EditIcon from "./icons/Edit.svelte";
+	import TrashIcon from "./icons/Trash.svelte";
+	import CheckIcon from "./icons/Check.svelte";
+	import UncheckedIcon from "./icons/Uncheck.svelte";
 	let { todo = $bindable<Todo>(), toggle }: { todo: Todo; toggle: () => void } =
 		$props();
 </script>
@@ -9,19 +11,18 @@
 	<div class="t-front">
 		<button onclick={toggle}>
 			{#if todo.completed}
-				✅
+				<CheckIcon />
 			{:else}
-				⬜
+				<UncheckedIcon />
 			{/if}
 		</button>
 		<p class="title">{todo.title}</p>
 	</div>
 	<div class="t-centre">
 		<p>{todo.description}</p>
-		<p>{todo.startDate.toDateString()}</p>
+		<p class="date">{todo.startDate.toDateString()}</p>
 	</div>
 	<div class="t-back">
-
 		<button><EditIcon /></button>
 		<button><TrashIcon /></button>
 	</div>
@@ -38,6 +39,16 @@
 		background-color: var(--card-bg-colour);
 		padding: 25px 20px;
 		align-items: center;
+		height: 100px;
+	}
+
+	p {
+		max-height: 80%;
+		overflow: hidden;
+		flex: 1 1 auto;
+		line-clamp: 2;
+
+		overflow-y: auto;
 	}
 
 	.t-front,
@@ -46,20 +57,27 @@
 		display: flex;
 		gap: 25px;
 		align-items: center;
+		height: 100%;
 	}
 
-	.t-front,
-	.t-centre {
+	.t-front {
 		flex: 3;
 	}
-
+	.t-centre {
+		flex: 4;
+	}
 
 	.t-back {
 		flex: 1;
 	}
 
+	.date {
+		flex: 0 0 auto;
+	}
+
 	.t-front > *,
-	.t-back > * {
+	.t-back > *,
+	.t-centre * {
 		display: inline-block;
 	}
 

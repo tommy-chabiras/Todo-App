@@ -104,6 +104,7 @@
 
 	button,
 	select {
+		background-color: #FFFFFF;
 		padding: 10px 25px;
 		font-size: var(--font-md);
 		border-radius: var(--border-r);
