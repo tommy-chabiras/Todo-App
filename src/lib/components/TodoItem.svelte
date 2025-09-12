@@ -23,8 +23,8 @@
 		<p class="date">{todo.startDate.toDateString()}</p>
 	</div>
 	<div class="t-back">
-		<button><EditIcon /></button>
-		<button><TrashIcon /></button>
+		<button class="edit-btn"><EditIcon /></button>
+		<button class="trash-btn"><TrashIcon /></button>
 	</div>
 </li>
 
@@ -84,5 +84,34 @@
 	.title {
 		font-weight: 700;
 		font-size: 1.8rem;
+	}
+
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 100px;
+		width: 36px;
+		height: 36px;
+	}
+
+
+	button:hover {
+		background-color: #ffffff18;
+	}
+	.edit-btn {
+		color: #ffffff;
+	}
+
+	.edit-btn:hover {
+		transform: scale(1.1);
+	}
+
+	.trash-btn {
+		color: #ff0000;
+	}
+
+	.trash-btn:hover {
+		transform: scale(1.1);
 	}
 </style>
