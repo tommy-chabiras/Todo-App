@@ -10,3 +10,8 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 src/generated/*.rs
 deny.toml
+/target
+**/target
+/src-tauri/target
+/src-tauri/tauri.conf.json.bak
+.vscode/
