@@ -25,19 +25,29 @@
 	box-sizing: border-box;
 }
 
+html,
+body {
+	height: 100%;
+}
+
 body {
 	background-color: var(--bg-colour);
-	padding: 5px 25px;
+	padding: 5px 25px 25px 25px;
 	color: var(--font-colour);
 	font-family: var(--font-family);
 	user-select: none;
-
+	display: flex;
+	flex-direction: column;
 
 }
 
 button {
-  background: none;
-  cursor: pointer;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: none;
+	line-height: 0;
+	cursor: pointer;
 }
 
 ul {
@@ -47,6 +57,6 @@ ul {
 
 
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #4b839e transparent;
+	scrollbar-width: thin;
+	scrollbar-color: #4b839e transparent;
 }
