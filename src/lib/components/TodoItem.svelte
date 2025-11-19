@@ -1,8 +1,8 @@
 <script lang="ts">
-	import EditIcon from "./icons/Edit.svelte";
-	import TrashIcon from "./icons/Trash.svelte";
-	import CheckIcon from "./icons/Check.svelte";
-	import UncheckedIcon from "./icons/Uncheck.svelte";
+	import EditIcon from "./icons/EditIcon.svelte";
+	import TrashIcon from "./icons/TrashIcon.svelte";
+	import CheckIcon from "./icons/CheckIcon.svelte";
+	import UncheckedIcon from "./icons/UncheckIcon.svelte";
 	let { todo = $bindable<Todo>(), toggle }: { todo: Todo; toggle: () => void } =
 		$props();
 </script>

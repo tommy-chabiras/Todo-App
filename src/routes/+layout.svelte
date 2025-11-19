@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { nav } from "$lib/stores/nav";
+	import AddTodoIcon from "$lib/components/icons/AddTodoIcon.svelte";
 </script>
 
 <header>
@@ -63,11 +64,19 @@
 </nav>
 <main>
 	<slot />
+	<button class="add-todo">
+		<AddTodoIcon></AddTodoIcon>
+	</button>
 </main>
 
 <style>
 	h1 {
 		text-align: center;
+	}
+
+	main {
+		position: relative;
+		height: 100%;
 	}
 
 	header {
@@ -98,13 +107,27 @@
 		justify-content: stretch;
 	}
 
+	.add-todo:hover {
+		box-shadow: 0 0 20px var(--primary-colour);
+	}
+	
+	.add-todo {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		padding: 15px;
+		border-radius: 50px;
+		background-color: var(--primary-colour);
+		justify-self: end;
+	}
+
 	label {
 		font-size: var(--font-md);
 	}
 
 	button,
 	select {
-		background-color: #FFFFFF;
+		background-color: #ffffff;
 		padding: 10px 25px;
 		font-size: var(--font-md);
 		border-radius: var(--border-r);
