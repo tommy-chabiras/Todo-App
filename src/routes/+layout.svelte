@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { nav } from "$lib/stores/nav";
 	import AddTodoIcon from "$lib/components/icons/AddTodoIcon.svelte";
+	import AddTodoModal from "$lib/components/AddTodoModal.svelte";
+
+	let showModal = false;
 </script>
 
 <header>
@@ -64,10 +67,14 @@
 </nav>
 <main>
 	<slot />
-	<button class="add-todo">
+	<button class="add-todo" onclick={() => (showModal = true)}>
 		<AddTodoIcon></AddTodoIcon>
 	</button>
 </main>
+
+{#if showModal}
+	<AddTodoModal bind:showModal />
+{/if}
 
 <style>
 	h1 {
@@ -110,7 +117,7 @@
 	.add-todo:hover {
 		box-shadow: 0 0 20px var(--primary-colour);
 	}
-	
+
 	.add-todo {
 		position: absolute;
 		bottom: 0;

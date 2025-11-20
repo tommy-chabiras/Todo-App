@@ -50,6 +50,10 @@ button {
 	cursor: pointer;
 }
 
+input, textarea {
+	font-family: var(--font-family);
+}
+
 ul {
 	list-style: none;
 }
