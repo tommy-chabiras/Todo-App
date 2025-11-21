@@ -4,26 +4,41 @@
 	import { nav } from "$lib/stores/nav";
 	import { invoke } from "@tauri-apps/api/core";
 
-	const todos: Todo[] = [
-		{
-			id: "1",
-			title: "first todo",
-			description: "example descrgfewiug feuifew ghifuewbviuieowb iuuiveboifeq uivewiovwebv oweivweuiobefwi bvweioubgeiu geb",
-			completed: false,
-			startDate: new Date(),
-			endDate: new Date(),
-			createdAt: new Date(),
-		},
-		{
-			id: "2",
-			title: "a second todo",
-			description: "example descr",
-			completed: false,
-			startDate: new Date(),
-			endDate: new Date(),
-			createdAt: new Date(),
-		},
-	];
+
+	let todos: Todo[] = $state([]);
+	invoke<Todo[]>("get_todos")
+	.then((data) => {
+		todos = data.map(todo => ({
+			...todo,
+			startDate: new Date(todo.startDate),
+			endDate: new Date(todo.endDate),
+			createdAt: new Date(todo.createdAt),
+		}));
+	})
+	.catch((err) => {
+		console.error("Failure to load todos:", err);
+	})
+	
+	// const todos: Todo[] = [
+	// 	{
+	// 		id: "1",
+	// 		title: "first todo",
+	// 		description: "example descrgfewiug feuifew ghifuewbviuieowb iuuiveboifeq uivewiovwebv oweivweuiobefwi bvweioubgeiu geb",
+	// 		completed: false,
+	// 		startDate: new Date(),
+	// 		endDate: new Date(),
+	// 		createdAt: new Date(),
+	// 	},
+	// 	{
+	// 		id: "2",
+	// 		title: "a second todo",
+	// 		description: "example descr",
+	// 		completed: false,
+	// 		startDate: new Date(),
+	// 		endDate: new Date(),
+	// 		createdAt: new Date(),
+	// 	},
+	// ];
 
 	let todosFiltered: Todo[] = $state([]);
 
