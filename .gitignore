@@ -15,4 +15,4 @@ deny.toml
 /src-tauri/target
 /src-tauri/tauri.conf.json.bak
 .vscode/
-.db
+*.db
