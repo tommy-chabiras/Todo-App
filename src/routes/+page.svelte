@@ -2,7 +2,7 @@
 	import CalendarCell from "$lib/components/CalendarCell.svelte";
 	import TodoItem from "$lib/components/TodoItem.svelte";
 	import { nav } from "$lib/stores/nav";
-
+	import { invoke } from "@tauri-apps/api/core";
 
 	const todos: Todo[] = [
 		{
@@ -71,6 +71,11 @@
 		todosFiltered = filtered;
 	});
 
+
+	const message = invoke('greet', { name: 'Tommy' });
+	message.then(data => {
+		console.log(data)
+	});
 
 </script>
 
