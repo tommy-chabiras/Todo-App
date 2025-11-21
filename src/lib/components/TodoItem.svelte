@@ -20,7 +20,7 @@
 	</div>
 	<div class="t-centre">
 		<p>{todo.description}</p>
-		<p class="date">{todo.startDate.toDateString()}</p>
+		<p class="date">{todo.endDate.toDateString()}</p>
 	</div>
 	<div class="t-back">
 		<button class="edit-btn"><EditIcon /></button>

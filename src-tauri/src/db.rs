@@ -1,5 +1,16 @@
 use rusqlite::{Connection, Result};
+use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Todo {
+    pub id: i64,
+    pub title: String,
+    pub description: String,
+    pub end_date: String,
+    pub completed: bool,
+}
 
 pub struct Db {
     pub conn: Mutex<Connection>,
@@ -32,27 +43,53 @@ impl Db {
         title: &str,
         description: &str,
         date: &str,
-    ) -> Result<(), Box<dyn std::error::Error>> {
-        self.conn.lock().unwrap().execute(
+    ) -> Result<i64, Box<dyn std::error::Error>> {
+        let conn = self.conn.lock().unwrap();
+        conn.execute(
             "INSERT INTO todos (title, description, end_date) VALUES (?1, ?2, ?3)",
             (title, description, date),
         )?;
-        Ok(())
+        let id = conn.last_insert_rowid();
+        Ok(id)
     }
 
-    pub fn get_todos(&self) -> Result<Vec<(i32, String, String, String)>> {
+    pub fn get_todo(&self, id: i64) -> Result<Todo> {
+        self.conn.lock().unwrap().query_row(
+            "SELECT id, title, description, completed, end_date 
+         FROM todos WHERE id = ?1",
+            [id],
+            |row| {
+                Ok(Todo {
+                    id: row.get(0)?,
+                    title: row.get(1)?,
+                    description: row.get(2)?,
+                    completed: row.get(3)?,
+                    end_date: row.get(4)?,
+                })
+            },
+        )
+    }
+
+    pub fn get_todos(&self) -> Result<Vec<Todo>> {
         let conn = self.conn.lock().unwrap();
-        let mut stmt = conn.prepare("SELECT id, title, description, end_date FROM todos")?;
+        let mut stmt =
+            conn.prepare("SELECT id, title, description, completed, end_date FROM todos")?;
         let rows = stmt
             .query_map([], |row| {
-                Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?))
+                Ok(Todo {
+                    id: row.get(0)?,
+                    title: row.get(1)?,
+                    description: row.get(2)?,
+                    completed: row.get(3)?,
+                    end_date: row.get(4)?,
+                })
             })?
             .collect::<Result<Vec<_>, _>>()?;
 
         Ok(rows)
     }
 
-    pub fn delete_todo(&self, id: i32) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn delete_todo(&self, id: i64) -> Result<(), Box<dyn std::error::Error>> {
         self.conn
             .lock()
             .unwrap()
@@ -60,10 +97,10 @@ impl Db {
         Ok(())
     }
 
-    pub fn update_todo(&self, id: i32, title: &str, description: &str, date: &str) -> Result<(), Box<dyn std::error::Error>> {
-        self.conn.lock().unwrap().execute(
-            "UPDATE todos SET title = ?1, description = ?2 end_date = ?3 WHERE id = ?4",
-            (title, description, date, id),
+    pub fn update_todo(&self, todo: Todo) -> Result<(), Box<dyn std::error::Error>> {
+		self.conn.lock().unwrap().execute(
+            "UPDATE todos SET title = ?1, description = ?2, completed = ?3, end_date = ?4 WHERE id = ?5",
+            (todo.title, todo.description, todo.completed, todo.end_date, todo.id),
         )?;
         Ok(())
     }

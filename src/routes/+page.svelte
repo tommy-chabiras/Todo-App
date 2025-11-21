@@ -3,57 +3,37 @@
 	import TodoItem from "$lib/components/TodoItem.svelte";
 	import { nav } from "$lib/stores/nav";
 	import { invoke } from "@tauri-apps/api/core";
-
-
-	let todos: Todo[] = $state([]);
-	invoke<Todo[]>("get_todos")
-	.then((data) => {
-		todos = data.map(todo => ({
-			...todo,
-			startDate: new Date(todo.startDate),
-			endDate: new Date(todo.endDate),
-			createdAt: new Date(todo.createdAt),
-		}));
-	})
-	.catch((err) => {
-		console.error("Failure to load todos:", err);
-	})
-	
-	// const todos: Todo[] = [
-	// 	{
-	// 		id: "1",
-	// 		title: "first todo",
-	// 		description: "example descrgfewiug feuifew ghifuewbviuieowb iuuiveboifeq uivewiovwebv oweivweuiobefwi bvweioubgeiu geb",
-	// 		completed: false,
-	// 		startDate: new Date(),
-	// 		endDate: new Date(),
-	// 		createdAt: new Date(),
-	// 	},
-	// 	{
-	// 		id: "2",
-	// 		title: "a second todo",
-	// 		description: "example descr",
-	// 		completed: false,
-	// 		startDate: new Date(),
-	// 		endDate: new Date(),
-	// 		createdAt: new Date(),
-	// 	},
-	// ];
+	import { todos } from "$lib/stores/todos";
 
 	let todosFiltered: Todo[] = $state([]);
 
 	$effect(() => {
-		let filtered = todos;
+		invoke<Todo[]>("get_todos")
+			.then((data) => {
+				todos.set(
+					data.map((todo) => ({
+						...todo,
+						startDate: new Date(todo.startDate),
+						endDate: new Date(todo.endDate),
+						createdAt: new Date(todo.createdAt),
+					}))
+				);
+			})
+			.catch(console.error);
+	});
+
+	$effect(() => {
+		let filtered = [...$todos];
 		switch ($nav.view) {
 			case "list":
 				switch ($nav.list.sort) {
 					case "date":
-						filtered = filtered.sort(
+						filtered.sort(
 							(a, b) => b.startDate.getTime() - a.startDate.getTime()
 						);
 						break;
 					case "a-z":
-						filtered = filtered.sort((a, b) => a.title.localeCompare(b.title));
+						filtered.sort((a, b) => a.title.localeCompare(b.title));
 						break;
 					case "custom":
 						break;
@@ -86,36 +66,44 @@
 		todosFiltered = filtered;
 	});
 
-
-	const message = invoke('greet', { name: 'Tommy' });
-	message.then(data => {
-		console.log(data)
-	});
-
+	function toggle(todo: Todo) {
+		todo.completed = !todo.completed;
+		invoke("update_todo", {
+			todo: {
+				id: todo.id,
+				title: todo.title,
+				description: todo.description,
+				completed: todo.completed,
+				endDate: todo.endDate.toISOString(),
+			},
+		})
+			.then(() => {
+				todos.update((data) => {
+					const t = data.find((t) => t.id === todo.id);
+					if (t) t.completed = !t.completed;
+					return data;
+				});
+			})
+			.catch((err) => {
+				console.error("Failed to update todo:", err);
+				todo.completed = !todo.completed;
+			});
+	}
 </script>
 
 {#if $nav.view === "calendar"}
-	{#each todos as todo}
+	{#each $todos as todo}
 		<CalendarCell {todo}></CalendarCell>
 	{/each}
 {:else}
 	<ul>
 		{#each todosFiltered as todo}
 			{#if ($nav.list.filter === "current" && !todo.completed) || ($nav.list.filter === "completed" && todo.completed) || $nav.list.filter === "all"}
-				<TodoItem
-					{todo}
-					toggle={() => {
-						const original = todos.find((t) => t.id === todo.id);
-						todo.completed = !todo.completed;
-						if (original) original.completed = !original.completed;
-					}}
-				/>
+				<TodoItem {todo} toggle={() => toggle(todo)} />
 			{/if}
 		{/each}
 	</ul>
 {/if}
-
-
 
 <style>
 </style>

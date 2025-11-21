@@ -1,14 +1,37 @@
 <script lang="ts">
-	import { stopPropagation } from "svelte/legacy";
+	import { invoke } from "@tauri-apps/api/core";
 
-	let { showModal = $bindable() } = $props();
+	let { showModal = $bindable(), todos = $bindable() } = $props();
 
+	let form: HTMLFormElement;
+
+	function saveTodo(e: Event) {
+		const formData = new FormData(form);
+
+		invoke("add_todo", {
+			title: formData.get("title") as string,
+			description: formData.get("description") as string,
+			date: formData.get("date") as string,
+		})
+			.then(() => {
+				showModal = false;
+				form.reset();
+			})
+			.catch((err) => console.error("Failed to add todo:", err));
+	}
 </script>
 
-<div class="modal-backdrop" onclick={(e) => {if (e.target == e.currentTarget) showModal = false}} role="presentation" aria-label="Close modal">
+<div
+	class="modal-backdrop"
+	onclick={(e) => {
+		if (e.target == e.currentTarget) showModal = false;
+	}}
+	role="presentation"
+	aria-label="Close modal"
+>
 	<div class="modal-con">
 		<h1>Add Todo</h1>
-		<form class="task-form">
+		<form class="task-form" bind:this={form}>
 			<div class="field">
 				<label for="title">Title:</label>
 				<input type="text" id="title" name="title" required />
@@ -26,8 +49,14 @@
 			</div>
 
 			<div class="buttons">
-				<button onclick={() => showModal = false} class="modal-button" type="button">Cancel</button>
-				<button onclick={() => showModal = false} class="modal-button" type="submit">Add Todo</button>
+				<button
+					onclick={() => (showModal = false)}
+					class="modal-button"
+					type="button">Cancel</button
+				>
+				<button onclick={saveTodo} class="modal-button" type="submit"
+					>Add Todo</button
+				>
 			</div>
 		</form>
 	</div>
